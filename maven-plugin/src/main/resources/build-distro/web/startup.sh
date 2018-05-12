@@ -17,6 +17,7 @@ create_database_user=false
 module_web_admin=${MODULE_WEB_ADMIN}
 create_tables=${DB_CREATE_TABLES}
 auto_update_database=${DB_AUTO_UPDATE}
+admin_user_password=${OPENMRS_ADMIN_PASSWORD}
 EOF
 else
 cat > /usr/local/tomcat/openmrs-server.properties << EOF
