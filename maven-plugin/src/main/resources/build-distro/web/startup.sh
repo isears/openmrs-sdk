@@ -5,6 +5,8 @@ DB_AUTO_UPDATE=${DB_AUTO_UPDATE:-false}
 MODULE_WEB_ADMIN=${MODULE_WEB_ADMIN:-true}
 DEBUG=${DEBUG:-false}
 
+# Require OPENMRS_ADMIN_PASSWORD if not in debug mode
+if [ $DEBUG ]; then
 cat > /usr/local/tomcat/openmrs-server.properties << EOF
 install_method=auto
 connection.url=jdbc\:mysql\://${DB_HOST}\:3306/${DB_DATABASE}?autoReconnect\=true&sessionVariables\=default_storage_engine\=InnoDB&useUnicode\=true&characterEncoding\=UTF-8
@@ -16,6 +18,25 @@ module_web_admin=${MODULE_WEB_ADMIN}
 create_tables=${DB_CREATE_TABLES}
 auto_update_database=${DB_AUTO_UPDATE}
 EOF
+else
+cat > /usr/local/tomcat/openmrs-server.properties << EOF
+install_method=auto
+connection.url=jdbc\:mysql\://${DB_HOST}\:3306/${DB_DATABASE}?autoReconnect\=true&sessionVariables\=default_storage_engine\=InnoDB&useUnicode\=true&characterEncoding\=UTF-8
+connection.username=${DB_USERNAME}
+connection.password=${DB_PASSWORD}
+has_current_openmrs_database=true
+create_database_user=false
+module_web_admin=${MODULE_WEB_ADMIN}
+create_tables=${DB_CREATE_TABLES}
+auto_update_database=${DB_AUTO_UPDATE}
+admin_user_password=${OPENMRS_ADMIN_PASSWORD}
+EOF
+fi
+
+# Remove demo data if not in DEBUG mode
+if ! [ $DEBUG ]; then
+    sed -i '/^omod.referencedemodata/d' /root/openmrs-distro.properties
+fi
 
 echo "------  Starting distribution -----"
 cat /root/openmrs-distro.properties
