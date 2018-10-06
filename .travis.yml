@@ -4,7 +4,7 @@ install :
   - mvn install -DskipTests # TODO: actually run tests after all the other kinks are worked out
 script:
   - cd /tmp/
-  - mvn org.openmrs.maven.plugins:openmrs-sdk-maven-plugin:3.13.1-SNAPSHOT:build-distro -Ddir=docker -Ddistro=referenceapplication:2.8.0 -DbatchAnswers=n
+  - mvn org.openmrs.maven.plugins:openmrs-sdk-maven-plugin:3.13.1-SNAPSHOT:build-distro -Ddir=docker -Ddistro=org.openmrs.distro:referenceapplication:2.8.0 -DbatchAnswers=n
   - ls -lah ./docker
 #deploy:
 #  provider: script
