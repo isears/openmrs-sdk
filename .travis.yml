@@ -1,8 +1,9 @@
 language: java
+jdk: openjdk7
 install :
-  - mvn clean install
+  - mvn org.openmrs.maven.plugins:openmrs-sdk-maven-plugin:setup-sdk -DbatchAnswers=n
 script:
-  - echo "holder"
+  - mvn install
 #deploy:
 #  provider: script
 #  script: ./deploy.sh
