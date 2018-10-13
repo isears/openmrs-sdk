@@ -1,15 +1,24 @@
+secure:
+  - "Y5yMdY8G+ipU0YZKEVU90cowRIw9U/xD2RbOwFbyg/KuZM/yWHlRhNMi03aFa2Em+AdXZuNqMxqS2MUTUJqEcrR49y9knRVZf8XcObFrvn/ryqXvu0It/Qe9N/g6PwlhvkpcmjW7ShVxycMmEYmUQ7dbNcQ6Ot87sJ1WP3mPfCUbttV1LF0eseDLExyCoL2oCUX8P4o37evYzWQgr/Oehc7m8sglJ8Nl9VBKULHcO9ybEtjFFe7cMBXgUyQOnLa9fK58REffvmoPEYitA0lOC8PS5HMtD9jiIBZZXozCSvz2GCpRGUDCmW5lUhM4m336Pkmg0lKlFD1udob8qTlaFPp1r6yy/Szhyah+Cspc/axg/QrM+phexu35GP+Q3Tq0+r4Uzf59kX8VHdl7j1zu3oQRaHhnLgW52MrNLMNtZfuvXTcbVaKDl/y+BU0x02nGJQdorQB3gTJNnWvGuHZ4JoL1K5luN2mpEodn5JP2+0Hwhlog5Fltl0b5cpUtnzf2Id4pXZ9Re5MndEPEcHqOQjeAZq5vxeUatvHmFtiTA5BduKYU4cnXhkpjEKG6Y0QX44uEGCkzRefCG61x57abtCJiS+ppSinxjE0IHpTujVkPb6PFCJF26lHS7UWbU/2onPmuefN4k2S/GS+aGcDHq9DhAMnqLLjRBa07kLCgR3c="
+  - "QOPvDFmbAr4PZz4lIRkVW4EsoTS7JkYM8MOIe7AnugaP+IHCIsbTHG6wqFJGs2dTSy3q83sg7lW/JIgUM0X0Y9qDoKHQdlwUTZdcXvX5QSmmUApUDO4U8MSH5/IHp0NKd+QyKq/jumd3xYS8YtlD6y/BZBLkHfiztb05E7ItoAUpc9kMIOFCO9SMbjUMOyXNditvzvM2q+cZ+sROkuRN8mwdYH/qcBwvXLoikGKv4vf8ktPg1+wGpnxSeQnyMuWXknFbO1Fv6M/pdnq2MtiJIoo12k50HktNgCv3FvMJ5oqyyeIdzRcJPFNMameTZZXhqzlPNryYeBpVxPM1UepXsA3XyR/HRQ4li6NkpAIi1l6aXSsQMH1LPXSKqBxWwwcaftmjCGzRCj86TarLw+qJ6ab1KrnWiQ5RMmEU/vOAo7SuzZV2oEcnlp+eYOPyNB74sj0kuxFnJMVIzVwFGD072IL2DpWbqwvp+kxIVJK1Fjhvrq0z+yFwyrd2yS10uaiZPuRMjTbGGuHWVE9M58LOYRKC2mtQF+v+J9TFdGBSFMfeMCGJ+LNrGAeT+PmL8rNYfXG7aL4PuEDydqYTRbgJuvOoGJSdv10Xboyy8N+f+qUeWZwLK/jJ2fcM0HGXBYtC6NqvRoTDOPgAUOr050qoKgKKfRz69zNVW2QiS/PbcFs="
+
 language: java
 jdk: openjdk7
+
+services:
+  - docker
+
 install :
   - mvn install -DskipTests # TODO: actually run tests after all the other kinks are worked out
   - mvn org.openmrs.maven.plugins:openmrs-sdk-maven-plugin:3.13.1-SNAPSHOT:setup-sdk -DbatchAnswers=n
+
 script:
   - cd /tmp/
   - mvn org.openmrs.maven.plugins:openmrs-sdk-maven-plugin:3.13.1-SNAPSHOT:build-distro -Ddir=docker -Ddistro=org.openmrs.distro:referenceapplication:2.8.0 -DbatchAnswers=n
-  - ls -lah ./docker
-#deploy:
-#  provider: script
-#  script: ./deploy.sh
-#  skip_cleanup: true
-#  on:
-#    tags: true
+  - cd docker/web/
+  - docker build ./ -t isears/refapp-production:latest
+  - docker push
+
+after_success:
+  - dockerlogin -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker push isears/refapp-production:latest
