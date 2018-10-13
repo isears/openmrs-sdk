@@ -17,7 +17,6 @@ script:
   - mvn org.openmrs.maven.plugins:openmrs-sdk-maven-plugin:3.13.1-SNAPSHOT:build-distro -Ddir=docker -Ddistro=org.openmrs.distro:referenceapplication:2.8.0 -DbatchAnswers=n
   - cd docker/web/
   - docker build ./ -t isears/refapp-production:latest
-  - docker push
 
 after_success:
   - dockerlogin -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
