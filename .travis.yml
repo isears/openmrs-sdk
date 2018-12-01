@@ -17,7 +17,7 @@ services:
 
 install :
   - |
-    mvn install -DskipTests # TODO: actually run tests after all the other kinks are worked out
+    mvn install
     mvn org.openmrs.maven.plugins:openmrs-sdk-maven-plugin:3.13.1-SNAPSHOT:setup-sdk -DbatchAnswers=n
 
 script:
