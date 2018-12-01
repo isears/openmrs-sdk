@@ -21,5 +21,5 @@ script:
 
 after_success:
   - env
-  - echo "$DOCKERHUB_PASS" | dockerlogin -u $DOCKERHUB_USER --password-stdin
+  - echo "$DOCKERHUB_PASS" | docker login -u $DOCKERHUB_USER --password-stdin
   - docker push isears/refapp-production:latest
