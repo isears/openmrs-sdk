@@ -25,13 +25,16 @@ script:
     cd /tmp/
     mvn org.openmrs.maven.plugins:openmrs-sdk-maven-plugin:3.13.1-SNAPSHOT:build-distro -Ddir=docker -Ddistro=org.openmrs.distro:referenceapplication:$REFAPP_VERSION -DbatchAnswers=n
     cd docker/web/
-    docker build ./ -t isears/refapp-production:latest
+    if [[ $REFAPP_VERSION == *"SNAPSHOT"* ]]; then
+      docker build ./ -t isears/refapp-production:latest
+    else
+      docker build ./ -t isears/refapp-production:$REFAPP_VERSION
+    fi
 
 after_success:
   - |
     env
     echo "$DOCKERHUB_PASS" | docker login -u $DOCKERHUB_USER --password-stdin
-
     if [[ $REFAPP_VERSION == *"SNAPSHOT"* ]]; then
       docker push isears/refapp-production:latest
     else
