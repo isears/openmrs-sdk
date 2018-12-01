@@ -18,12 +18,12 @@ services:
 install :
   - |
     mvn install
-    mvn org.openmrs.maven.plugins:openmrs-sdk-maven-plugin:3.13.1-SNAPSHOT:setup-sdk -DbatchAnswers=n
+    mvn org.openmrs.maven.plugins:openmrs-sdk-maven-plugin:setup-sdk -DbatchAnswers=n
 
 script:
   - |
     cd /tmp/
-    mvn org.openmrs.maven.plugins:openmrs-sdk-maven-plugin:3.13.1-SNAPSHOT:build-distro -Ddir=docker -Ddistro=org.openmrs.distro:referenceapplication:$REFAPP_VERSION -DbatchAnswers=n
+    mvn org.openmrs.maven.plugins:openmrs-sdk-maven-plugin:build-distro -Ddir=docker -Ddistro=org.openmrs.distro:referenceapplication:$REFAPP_VERSION -DbatchAnswers=n
     cd docker/web/
     if [[ $REFAPP_VERSION == *"SNAPSHOT"* ]]; then
       docker build ./ -t isears/refapp-production:latest
