@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/isears/openmrs-sdk.svg?branch=master)](https://travis-ci.org/isears/openmrs-sdk)
+[![Build Status](https://travis-ci.org/isears/openmrs-sdk.svg?branch=production-images)](https://travis-ci.org/isears/openmrs-sdk)
 
 # Isears Fork of OpenMRS-SDK
 
